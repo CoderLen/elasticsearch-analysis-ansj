@@ -21,9 +21,14 @@ public class FileUtils {
 
 	  public static void remove(String content) {
 	    try {
-	      removeFile(content, AnsjElasticConfigurator.REDIS_LIB_FILE, false);
+	      File file = new File(AnsjElasticConfigurator.environment.configFile(), "ansj/user/ext.dic");
+	      removeFile(content, file, false);
+	    }
+	    catch (FileNotFoundException e) {
+	      logger.error("file not found $ES_HOME/config/ansj/user/ext.dic", e, new Object[0]);
+	      e.printStackTrace();
 	    } catch (IOException e) {
-	      logger.error("remove exception", e);
+	      logger.error("read exception", e, new Object[0]);
 	      e.printStackTrace();
 	    }
 	  }
@@ -31,19 +36,24 @@ public class FileUtils {
 	  public static void append(String content)
 	  {
 	    try {
-	      appendFile(content, AnsjElasticConfigurator.REDIS_LIB_FILE);
+	      File file = new File(AnsjElasticConfigurator.environment.configFile(), "ansj/user/ext.dic");
+	      appendFile(content, file);
 	    } catch (IOException e) {
-	      logger.error("append exception", e);
+	      logger.error("read exception", e, new Object[0]);
 	      e.printStackTrace();
 	    }
 	  }
 
 	  public static void removeAMB(String content) {
 	    try {
-	      File file = new File(AnsjElasticConfigurator.DEFAULT_AMB_FILE_LIB_PATH);
+	      File file = new File(AnsjElasticConfigurator.environment.configFile(), "ansj/ambiguity.dic");
 	      removeFile(content, file, true);
+	    }
+	    catch (FileNotFoundException e) {
+	      logger.error("file not found $ES_HOME/config/ansj/user/ext.dic", e, new Object[0]);
+	      e.printStackTrace();
 	    } catch (IOException e) {
-	      logger.error("removaAMB exception", e);
+	      logger.error("read exception", e, new Object[0]);
 	      e.printStackTrace();
 	    }
 	  }
@@ -51,10 +61,10 @@ public class FileUtils {
 	  public static void appendAMB(String content)
 	  {
 	    try {
-	      File file = new File(AnsjElasticConfigurator.DEFAULT_AMB_FILE_LIB_PATH);
+	      File file = new File(AnsjElasticConfigurator.environment.configFile(), "ansj/ambiguity.dic");
 	      appendFile(content, file);
 	    } catch (IOException e) {
-	      logger.error("appendAMB exception", e);
+	      logger.error("read exception", e, new Object[0]);
 	      e.printStackTrace();
 	    }
 	  }
@@ -67,12 +77,13 @@ public class FileUtils {
 	    writer.close();
 	  }
 
-	  private static void removeFile(String content, File file, boolean head) throws IOException
+	  private static void removeFile(String content, File file, boolean head) throws FileNotFoundException, IOException
 	  {
 	    BufferedReader reader = new BufferedReader(new FileReader(file));
-	    List<String> list = new ArrayList<>();
+	    List<String> list = new ArrayList<String>();
 	    String text = reader.readLine();
 	    while (text != null) {
+	      logger.info("match is {} text is{}", new Object[] { Boolean.valueOf(match(content, text, head)), text });
 	      if (match(content, text, head)) {
 	        list.add(text);
 	      }

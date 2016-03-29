@@ -5,7 +5,7 @@ import org.elasticsearch.common.logging.Loggers;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-
+//可移植
 public class RedisUtils {
 	
 	private static JedisPool jedisPool;

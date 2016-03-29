@@ -9,7 +9,7 @@ import org.elasticsearch.common.logging.Loggers;
 import org.nlpcn.commons.lang.tire.domain.Value;
 import org.nlpcn.commons.lang.tire.library.Library;
 import redis.clients.jedis.JedisPubSub;
-
+//可移植
 public class AddTermRedisPubSub extends JedisPubSub {
 
 	public static ESLogger logger = Loggers.getLogger("ansj-redis-msg");

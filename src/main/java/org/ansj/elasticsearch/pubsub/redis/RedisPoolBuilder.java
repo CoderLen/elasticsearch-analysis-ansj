@@ -9,23 +9,13 @@ import redis.clients.jedis.JedisPoolConfig;
 public class RedisPoolBuilder {
 	
 	public static ESLogger logger = Loggers.getLogger("ansj-redis-pool");
-	
-	private int maxActive=20;
 	private int maxIdle=10;
 	private int maxWait=1000;
 	private boolean testOnBorrow=true;
 	
-	private String ipAddress="127.0.0.1:6379";
+	private String ipAddress="master.redis.yao.com:6379";
 	private int port=6379;
 	
-	
-	public int getMaxActive() {
-		return maxActive;
-	}
-	public RedisPoolBuilder setMaxActive(int maxActive) {
-		this.maxActive = maxActive;
-		return this;
-	}
 	public int getMaxIdle() {
 		return maxIdle;
 	}
@@ -64,9 +54,8 @@ public class RedisPoolBuilder {
 	
 	public JedisPool jedisPool(){
 		JedisPoolConfig config = new JedisPoolConfig();
-		config.setMaxActive(getMaxActive());
 		config.setMaxIdle(getMaxIdle());
-		config.setMaxWait(getMaxWait());
+		config.setMaxWaitMillis(getMaxWait());
 		config.setTestOnBorrow(isTestOnBorrow());
 		String[] ipAndPort = getIpAddress().split(":");
 		String ip="";
